@@ -1,4 +1,4 @@
-typedef int rank;
+typedef int RANK;
 
 template<typename T> struct ListNode{
     T data; ListNode<T> *pred, *succ;
@@ -15,11 +15,11 @@ template<typename T> struct ListNode{
 
 template<typename T> class List{
 private:
-    rank _size; ListNode<T> *header, *tailer;
+    RANK _size; ListNode<T> *header, *tailer;
 
 public:
 
-    rank find(T e, rank n, ListNode<T>* p){
+    RANK find(T e, RANK n, ListNode<T>* p){
         while(p!=header && p->pred->data!=e) p=p->pred;
         return  (p==header)? NULL: p;
     }
