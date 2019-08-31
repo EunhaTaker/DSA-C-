@@ -19,8 +19,12 @@ Vector(const Vector<T>& V, RANK lo, RANK hi){
     copyFrom(V, lo, hi);}
 // Vector(const Vector<T>& V){
 //     copyFrom(V, 0, V.size());}
+///析构
+~Vector() {delete[] _elem; }
 
+bool empty() {return _size==0;}
 
+virtual T operator [](RANK idx){return _elem[idx];}
 
 ///复制
 void copyFrom(T const *A, RANK lo, RANK hi){
@@ -205,13 +209,6 @@ void mergeSort(RANK lo=0, RANK hi=-1){
             telem[lo1++]:
             _elem[lo2++];
     }
-}
-
-///析构
-~Vector() { cout<<"为啥要析构"<<endl; delete[] _elem; }
-
-virtual T operator [](RANK idx){
-    return _elem[idx];
 }
 
 /**
