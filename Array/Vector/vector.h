@@ -2,7 +2,6 @@ typedef int RANK;
 #define DEFAULT_CAP  8
 #include<iostream>
 using namespace std;
-// #include "vector.h"
 
 template<typename T> class Vector{
 protected:
@@ -10,7 +9,10 @@ RANK _size, _capacity;
 T* _elem;
 ///复制
 void copyFrom(T const *A, RANK lo, RANK hi);
-void copyFrom(const Vector<T>& V, RANK lo, RANK hi);
+template<class STL>
+void copyFrom(STL& V, RANK lo, RANK hi);
+//扩容
+void expand(RANK n=0);
 
 public:
 ///构造
@@ -18,47 +20,69 @@ Vector(RANK capacity=DEFAULT_CAP){
     _elem = new T[_capacity=capacity];_size = 0;}
 Vector(T const *A, RANK lo, RANK hi){
     copyFrom(A, lo, hi);}
-Vector(const Vector<T>& V, RANK lo, RANK hi){
-    copyFrom(V, lo, hi);}
+template<class STL>
+Vector(STL& V, RANK lo=0, RANK hi=-1){
+    copyFrom(V, lo, hi==-1?V.size():hi);}
+Vector(initializer_list<T>);
 // Vector(const Vector<T>& V){
 //     copyFrom(V, 0, V.size());}
-///析构
+//析构
 ~Vector() {delete[] _elem; }
 bool empty() {return _size==0;}
-virtual T operator [](RANK idx){return _elem[idx];}
-//扩容
-void expand();
-//插入
-void insert(RANK idx, T value);
-//尾部追加
-void append(T value);
-//删除区间
-bool cut(RANK lo, RANK hi);
-//按索引删除
-T pop(RANK idx);
+// 大小
+RANK size() const{return _size;}
 //按索引获取值
 T get(RANK idx) const;
-//在区间内查找值
-RANK index(T value, RANK lo=0, RANK hi=-1) const;
-//按元素删除，删除最右边一个满足条件的元素
-RANK remove(T value);
 //修改
 bool put(RANK idx, T value);
+//重载[]
+virtual T operator [](RANK idx){return _elem[idx];}
+//重载+
+template<class STL> //参数、返回值模板化方便继承，下同
+STL operator +(STL &v){STL newv(*this); newv.Vector<T>::insert(_size, v); return newv;}
+//插入
+void insert(RANK idx, T value);
+//插入Vector
+template<class STL>
+void insert(RANK idx, STL &v);
+//尾部追加
+void append(T value);
+//截取区间 TODO STL无法推断
+// template<typename STL>
+// STL cut(RANK lo, RANK hi);
+//删除区间
+bool delRng(RANK lo, RANK hi);
+//按元素删除，删除最右边一个满足条件的元素
+RANK remove(T value);
+//按索引删除
+T pop(RANK idx);
+//在区间内查找值
+virtual RANK index(T value, RANK lo=0, RANK hi=-1) const;
 //遍历
 template<typename VST> void map(VST &visit);
 //去重
 void unique();
 //获取逆序度
 RANK dissorted() const;
-///排序
+/**排序**/
+void sort(RANK lo=0, RANK hi=-1){bubbleSort(lo, hi);}
 //冒泡排序
-void bubbleSort();
+void bubbleSort(RANK lo=0, RANK hi=-1);
 //归并排序
-void mergeSort(RANK lo=0, RANK hi=-1);
-// 大小
-RANK size() const{return _size;}
+void mergeSort(RANK lo=0, RANK hi=-1);  //TODO bug
 
 };
+
+
+template<typename T>
+Vector<T>::Vector(initializer_list<T> il){
+    _elem = new T[_capacity = 2*(_size = il.size())];
+    RANK i=0;
+    for(auto &e: il){
+        _elem[i++] = e;
+    }
+}
+
 
 template<typename T>
 void Vector<T>::copyFrom(T const *A, RANK lo, RANK hi){
@@ -68,8 +92,8 @@ void Vector<T>::copyFrom(T const *A, RANK lo, RANK hi){
         _elem[_size++]=A[lo++];
 }
 
-template<typename T>
-void Vector<T>::copyFrom(const Vector<T>& V, RANK lo, RANK hi){
+template<typename T> template<class STL>
+void Vector<T>::copyFrom(STL& V, RANK lo, RANK hi){
     _elem=new T[_capacity=hi-lo];
     _size=0;
     while(lo<hi)
@@ -78,10 +102,12 @@ void Vector<T>::copyFrom(const Vector<T>& V, RANK lo, RANK hi){
 
 
 template<typename T>
-void Vector<T>::expand(){
-    if(_size<_capacity) return;
+void Vector<T>::expand(RANK n){
+    if(n==0 && _size<_capacity) return;
+    if(n>0) _capacity += max(n, _capacity); //批量增加元素时
+    else _capacity<<=1;
     T *oldElem = _elem;
-    _elem = new T[_capacity<<=1];
+    _elem = new T[_capacity];
     for(RANK i=0;i<_size;i++)
         _elem[i] = oldElem[i];
     delete [] oldElem;
@@ -97,6 +123,19 @@ void Vector<T>::insert(RANK idx, T value){
     _elem[idx] = value;
 }
 
+template<typename T> template<class STL>
+void Vector<T>::insert(RANK idx, STL &v){
+    expand(v.size());
+    RANK ridx = idx+v.size();
+    for(RANK j=_size-1, i=(_size+=v.size())-1; i>=ridx; ){  //搬运[idx+v.size, _size+v.size)区间
+        _elem[i--] = _elem[j--];
+    }
+    for(RANK i=idx, j=0; i<ridx; ){ //将v拷贝到[idx, idx+v.size)区间
+        _elem[i++] = v[j++];
+    }
+}
+
+
 
 template<typename T>
 void Vector<T>::append(T value){
@@ -105,8 +144,20 @@ void Vector<T>::append(T value){
 }
 
 
+// template<typename T> template<typename STL>
+// STL Vector<T>::cut(RANK lo, RANK hi){
+//     RANK size = hi-lo;
+//     auto container = this;
+//     container->delRng(hi, container.size());
+//     container->delRng(0, lo);
+//     // RANK i=0;
+//     // while(lo<hi)
+//     //     container[i++] = _elem[lo++];
+//     return *container;
+// }
+
 template<typename T>
-bool Vector<T>::cut(RANK lo, RANK hi){
+bool Vector<T>::delRng(RANK lo, RANK hi){
     if(lo<0 || hi>_size || lo>=hi) return false;
     while(lo< (_size-=hi-lo)) //lo靠上新size时，搬运结束
         _elem[lo++] = _elem[hi++];
@@ -117,7 +168,7 @@ bool Vector<T>::cut(RANK lo, RANK hi){
 template<typename T>
 T Vector<T>::pop(RANK idx){
     T value = _elem[idx];
-    cut(idx, idx+1);
+    delRng(idx, idx+1);
     return value;
 }
 
@@ -203,19 +254,18 @@ void Vector<T>::unique(){
 
 
 template<typename T>
-void Vector<T>::bubbleSort(){
-    T temp;
-    RANK hi=_size,j;
-    while(hi>1){    //直至未排序部分剩余一个元素
-        for(j=1;j<hi;j++){   //冒泡至未排序部分的边界
+void Vector<T>::bubbleSort(RANK lo, RANK hi){
+    if(hi==-1) hi = _size;
+    RANK temphi, j;
+    while(hi>lo+1){    //直至未排序部分只剩一个元素
+        temphi = 0;
+        for(j=lo+1;j<hi;j++){   //冒泡至未排序部分的边界
             if(_elem[j]<_elem[j-1]){
-                temp = _elem[j];
-                _elem[j]=_elem[j-1];
-                _elem[j-1]=temp;
-                hi=j;   //智能限制边界
+                swap(_elem[j], _elem[j-1]);
+                temphi=j;   //记录交换操作到达的最右位置
             }
         }
-        if(hi>=j) return;   //特殊情况，已为顺序，退出
+        hi = temphi;    //智能限制右边界
     }
 }
 
