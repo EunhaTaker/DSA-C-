@@ -32,11 +32,11 @@ bool empty() {return _size==0;}
 // 大小
 RANK size() const{return _size;}
 //按索引获取值
-T get(RANK idx) const;
+T& get(RANK idx) const;
 //修改
 bool put(RANK idx, T value);
 //重载[]
-T operator [](RANK idx){return get(idx);}
+T& operator [](RANK idx){return get(idx);}
 //重载+
 template<class STL> //参数、返回值模板化方便继承，下同
 STL operator +(STL &v){STL newv(*this); newv.Vector<T>::insert(_size, v); return newv;}
@@ -176,7 +176,7 @@ T Vector<T>::pop(RANK idx){
 
 
 template<typename T>
-T Vector<T>::get(RANK idx) const{
+T& Vector<T>::get(RANK idx) const{
     // if (idx < _size*-1 || idx >= _size)
     //     return NULL;
     if(idx<0) idx += _size;

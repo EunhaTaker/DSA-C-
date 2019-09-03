@@ -5,7 +5,7 @@ void look(int& a){
     cout<<a<<" ";
 }
 
-int vmain()
+int main()
 {   
     Vector<int> v =  {1, 2, 3, 4,9,4,2,1};
     cout<<"size: "<<v.size()<<endl;
@@ -21,10 +21,11 @@ int vmain()
 
 }
 
-int main(){
+int smain(){
     SortedVector<int> sv = {4,23,7,5,0,5};
     cout<<"it's sv: ";sv.map(look);cout<<endl;
     SortedVector<int> sv1 = {9,0,1,-3,56};
+    cout<<"it's sv1: ";sv1.map(look);cout<<endl;
     cout<<"sortedvector's operate+ : ";(sv+sv1).map(look);cout<<endl;
     return 0;
 }
