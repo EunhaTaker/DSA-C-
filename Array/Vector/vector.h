@@ -36,7 +36,7 @@ T get(RANK idx) const;
 //修改
 bool put(RANK idx, T value);
 //重载[]
-virtual T operator [](RANK idx){return _elem[idx];}
+virtual T operator [](RANK idx){return get(idx);}
 //重载+
 template<class STL> //参数、返回值模板化方便继承，下同
 STL operator +(STL &v){STL newv(*this); newv.Vector<T>::insert(_size, v); return newv;}
@@ -56,6 +56,8 @@ bool delRng(RANK lo, RANK hi);
 RANK remove(T value);
 //按索引删除
 T pop(RANK idx);
+//删除全部
+void clear();
 //在区间内查找值
 virtual RANK index(T value, RANK lo=0, RANK hi=-1) const;
 //遍历
@@ -175,8 +177,9 @@ T Vector<T>::pop(RANK idx){
 
 template<typename T>
 T Vector<T>::get(RANK idx) const{
-    if (idx < 0 || idx >= _size)
-        return NULL;
+    // if (idx < _size*-1 || idx >= _size)
+    //     return NULL;
+    if(idx<0) idx += _size;
     return _elem[idx];
 }
 
@@ -195,6 +198,12 @@ RANK Vector<T>::remove(T value){
     if(idx!=-1)
         pop(idx);
     return idx;
+}
+
+
+template<typename T>
+void Vector<T>::clear(){
+    _size = 0;
 }
 
 
