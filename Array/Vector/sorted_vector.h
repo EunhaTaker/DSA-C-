@@ -9,7 +9,7 @@ template<class STL>
 SortedVector(STL& sv, RANK lo=0, RANK hi=-1): Vector<T>::Vector(sv, lo, hi) {Vector<T>::sort();}
 SortedVector(initializer_list<T> il):Vector<T>::Vector(il) {Vector<T>::sort();}
 //唯一化
-RANK unique();
+virtual RANK unique();
 //二分查找, 查找失败返回合适插入位置
 virtual RANK index(T const& e, RANK lo=0, RANK hi=-1) const;
 //二分查找，查找失败返回-1

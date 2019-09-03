@@ -36,15 +36,15 @@ T get(RANK idx) const;
 //修改
 bool put(RANK idx, T value);
 //重载[]
-virtual T operator [](RANK idx){return get(idx);}
+T operator [](RANK idx){return get(idx);}
 //重载+
 template<class STL> //参数、返回值模板化方便继承，下同
 STL operator +(STL &v){STL newv(*this); newv.Vector<T>::insert(_size, v); return newv;}
 //插入
 void insert(RANK idx, T value);
 //插入Vector
-template<class STL>
-void insert(RANK idx, STL &v);
+// template<class STL>
+void insert(RANK idx, Vector<T> &v);
 //尾部追加
 void append(T value);
 //截取区间 TODO STL无法推断
@@ -63,7 +63,7 @@ virtual RANK index(T value, RANK lo=0, RANK hi=-1) const;
 //遍历
 template<typename VST> void map(VST &visit);
 //去重
-void unique();
+virtual RANK unique();
 //获取逆序度
 RANK dissorted() const;
 /**排序**/
@@ -125,18 +125,18 @@ void Vector<T>::insert(RANK idx, T value){
     _elem[idx] = value;
 }
 
-template<typename T> template<class STL>
-void Vector<T>::insert(RANK idx, STL &v){
+
+template<typename T> //template<class STL>
+void Vector<T>::insert(RANK idx, Vector<T> &v){
     expand(v.size());
     RANK ridx = idx+v.size();
-    for(RANK j=_size-1, i=(_size+=v.size())-1; i>=ridx; ){  //搬运[idx+v.size, _size+v.size)区间
+    for(RANK j=_size-1, i=(_size+=v.size())-1; i>=ridx; ){  //搬运[idx, _size) 到 [idx+v.size, _size+v.size)区间
         _elem[i--] = _elem[j--];
     }
     for(RANK i=idx, j=0; i<ridx; ){ //将v拷贝到[idx, idx+v.size)区间
         _elem[i++] = v[j++];
     }
 }
-
 
 
 template<typename T>
@@ -245,7 +245,7 @@ void Vector<T>::map(VST &visit){
 //     return count
 // }
 template<typename T>
-void Vector<T>::unique(){
+RANK Vector<T>::unique(){
     RANK i=1,j=1,k=0;
     while(i<_size){
         for(k=0; k<i; k++){
@@ -259,6 +259,7 @@ void Vector<T>::unique(){
             _elem[i++]=_elem[j++];
         }
     }
+    return j-i;
 }
 
 
