@@ -25,8 +25,6 @@ private:    //禁用以下方法
 void insert(RANK idx, T value);
 //尾部追加
 void append(T value);
-//按索引删除
-T pop(RANK idx);
 //获取逆序度
 RANK dissorted() const;
 ///排序
