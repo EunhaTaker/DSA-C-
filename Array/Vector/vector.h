@@ -9,8 +9,6 @@ RANK _size, _capacity;
 T* _elem;
 ///复制
 void copyFrom(T const *A, RANK lo, RANK hi);
-template<class STL>
-void copyFrom(STL& V, RANK lo, RANK hi);
 //扩容
 void expand(RANK n=0);
 
@@ -20,9 +18,8 @@ Vector(RANK capacity=DEFAULT_CAP){
     _elem = new T[_capacity=capacity];_size = 0;}
 Vector(T const *A, RANK lo, RANK hi){
     copyFrom(A, lo, hi);}
-template<class STL>
-Vector(STL& V, RANK lo=0, RANK hi=-1){
-    copyFrom(V, lo, hi==-1?V.size():hi);}
+Vector(Vector<T> const& V, RANK lo=0, RANK hi=-1){
+    copyFrom(V._elem, lo, hi==-1?V.size():hi);}
 Vector(initializer_list<T>);
 // Vector(const Vector<T>& V){
 //     copyFrom(V, 0, V.size());}
@@ -77,29 +74,18 @@ void mergeSort(RANK lo=0, RANK hi=-1);  //TODO bug
 
 
 template<typename T>
-Vector<T>::Vector(initializer_list<T> il){
-    _elem = new T[_capacity = 2*(_size = il.size())];
-    RANK i=0;
-    for(auto &e: il){
-        _elem[i++] = e;
-    }
+Vector<T>::Vector(initializer_list<T> il):_size(0){
+    _elem = new T[_capacity = il.size()<<1];
+    for(auto &e: il) _elem[_size++] = e;
 }
 
 
 template<typename T>
 void Vector<T>::copyFrom(T const *A, RANK lo, RANK hi){
-    _elem=new T[_capacity=2*(hi-lo)];
+    _elem=new T[_capacity=(hi-lo)<<1];
     _size=0;
     while(lo<hi)
         _elem[_size++]=A[lo++];
-}
-
-template<typename T> template<class STL>
-void Vector<T>::copyFrom(STL& V, RANK lo, RANK hi){
-    _elem=new T[_capacity=hi-lo];
-    _size=0;
-    while(lo<hi)
-        _elem[_size++]=V[lo++];
 }
 
 

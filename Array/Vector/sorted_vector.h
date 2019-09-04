@@ -5,9 +5,10 @@ class SortedVector: public Vector<T>{
     
 public:
 SortedVector(RANK capacity=DEFAULT_CAP):Vector<T>::Vector(capacity){}
-template<class STL>
-SortedVector(STL& sv, RANK lo=0, RANK hi=-1): Vector<T>::Vector(sv, lo, hi) {Vector<T>::sort();}
-SortedVector(initializer_list<T> il):Vector<T>::Vector(il) {Vector<T>::sort();}
+// template<class STL>
+SortedVector(Vector<T>& sv, RANK lo=0, RANK hi=-1): Vector<T>::Vector(sv, lo, hi) {Vector<T>::sort();}
+SortedVector(SortedVector<T> const& sv) : Vector<T>::Vector(sv) {}
+SortedVector(initializer_list<T> il): Vector<T>::Vector(il) {Vector<T>::sort();}
 //唯一化
 virtual RANK unique();
 //二分查找, 查找失败返回合适插入位置

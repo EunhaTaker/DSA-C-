@@ -4,8 +4,9 @@ template<typename T>
 class Set : public SortedVector<T>{
 public:
 Set():SortedVector<T>::SortedVector(){}
-template<class STL>
-Set(STL& set, RANK lo=0, RANK hi=-1): SortedVector<T>::SortedVector(set, lo, hi) {SortedVector<T>::unique();}
+// template<class STL>
+Set(Vector<T>& set, RANK lo=0, RANK hi=-1): SortedVector<T>::SortedVector(set, lo, hi) {SortedVector<T>::unique();}
+Set(Set<T> const& set) : SortedVector<T>::SortedVector(set) {}
 Set(initializer_list<T> il): SortedVector<T>::SortedVector(il) {SortedVector<T>::unique();}
 //新增
 bool add(T e);

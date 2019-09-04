@@ -18,7 +18,20 @@ void iltst(initializer_list<int> il){
 void look(int& a){
     cout<<a<<" ";
 }
+
+class yy{
+    public:
+    yy(){cout<<"构造"<<endl;}
+    yy(yy &y){cout<<"构造"<<endl;}
+    ~yy(){cout<<"稀构"<<endl;}
+};
+yy fun(){
+    yy y;
+    return y;
+}
+void ff(int const& n){cout<<n;}
 int main(){
+    //  ff(3);
     Set<int> l = {6,3,2,7,3,6,9,0,3};
     cout<<"l: ";l.map(look);cout<<endl;
     // cout<<l.contain(0)<<endl;
@@ -37,5 +50,4 @@ int main(){
     cout<<"m==n: "<<(m==n)<<endl;
     cout<<"o<n: "<<(o<m)<<endl;
     cout<<"n>=o: "<<(n>=o)<<endl;
-
 }
