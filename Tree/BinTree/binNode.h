@@ -14,9 +14,9 @@ template<typename T> struct BinNode
     int height;
     //构造函数
     // BinNode():
-    //     parent(NULL), lchild(NULL), rchild(NULL), height(0) {}
-    BinNode(T e, BNode(T) p = NULL, int h=0):
-        data(e), parent(p), height(h), lchild(NULL), rchild(NULL) {}
+    //     parent(nullptr), lchild(nullptr), rchild(nullptr), height(0) {}
+    BinNode(T e, BNode(T) p = nullptr, int h=0):
+        data(e), parent(p), height(h), lchild(nullptr), rchild(nullptr) {}
     // ~BinNode(){ delete this;}//大忌
     int size() const; //后代数量
     bool isLChild() const;

@@ -5,13 +5,32 @@ protected:
 BNode(T) _root;
 
 public:
-BinTree(T const& e){_root = new BinNode<T>(e);}
+BinTree(){_root = nullptr;}
 ~BinTree(){_root->releaseAll();}
 BNode(T) getRoot() const;
 BNode(T)& search(T const&);
 virtual BNode(T)& searchFrom(T const& , BNode(T)& );
 void link(BNode(T) , BNode(T), BNode(T)&);
+BNode(T) insertAsRoot(T const&);
+// 以下作为测试函数，实际作用不大
+BNode(T) insertAsLchild(BNode(T), T const&);
+BNode(T) insertAsRchild(BNode(T), T const&);
 };
+
+
+template<typename T> BNode(T) BinTree<T>::insertAsRoot(T const& e){
+    return _root = new BinNode<T>(e);
+}
+
+template<typename T> BNode(T) BinTree<T>::insertAsLchild(BNode(T) node, T const& e){
+    if(!node) return nullptr;
+    return node->lchild = new BinNode<T>(e);
+}
+
+template<typename T> BNode(T) BinTree<T>::insertAsRchild(BNode(T) node, T const& e){
+    if(!node) return nullptr;
+    return node->rchild = new BinNode<T>(e);
+}
 
 template<typename T> BNode(T) BinTree<T>::getRoot() const{
     return this->_root;

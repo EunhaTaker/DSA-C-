@@ -8,7 +8,7 @@ template<typename T> class Vector{
 protected:
 RANK _size, _capacity;
 T* _elem;
-bool bHeapSort; //堆排序标志，说明该对象是用于堆排序的临时对象
+bool heapFlag; //堆排序标志，说明该对象是用于堆排序的临时对象
 
 ///复制
 void copyFrom(T const *A, RANK lo, RANK hi);
@@ -18,13 +18,13 @@ void expand(RANK n=0);
 public:
 ///构造
 Vector(RANK capacity=DEFAULT_CAP){ _elem = new T[_capacity=capacity];_size = 0; }
-Vector(T const *A, RANK lo, RANK hi, bool bHeapSort=false):bHeapSort(bHeapSort){
-    if(!bHeapSort)copyFrom(A, lo, hi);}
+Vector(T const *A, RANK lo, RANK hi, bool heapFlag=false):heapFlag(heapFlag){
+    if(!heapFlag)copyFrom(A, lo, hi);}
 Vector(Vector<T> const& V, RANK lo=0, RANK hi=-1){
     copyFrom(V._elem, lo, hi==-1?V.size():hi);}
 Vector(initializer_list<T>);
 //析构
-virtual ~Vector() { if(!bHeapSort) delete[] _elem; }
+~Vector() { if(!heapFlag) delete[] _elem; }
 bool empty() {return _size==0;}
 // 大小
 RANK size() const{return _size;}
@@ -46,7 +46,7 @@ void insert(RANK idx, Vector<T> &v);
 void append(T value);
 //截取区间 TODO STL无法推断
 // template<typename STL>
-// STL cut(RANK lo, RANK hi);
+Vector<T> sub(RANK lo, RANK hi);
 //删除区间
 bool delRng(RANK lo, RANK hi);
 //按元素删除，删除最右边一个满足条件的元素

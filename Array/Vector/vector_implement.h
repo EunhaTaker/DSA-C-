@@ -59,22 +59,23 @@ void Vector<T>::append(T value){
 }
 
 
-// template<typename T> template<typename STL>
-// STL Vector<T>::cut(RANK lo, RANK hi){
-//     RANK size = hi-lo;
-//     auto container = this;
-//     container->delRng(hi, container.size());
-//     container->delRng(0, lo);
-//     // RANK i=0;
-//     // while(lo<hi)
-//     //     container[i++] = _elem[lo++];
-//     return *container;
-// }
+template<typename T> //template<typename STL>
+Vector<T> Vector<T>::sub(RANK lo, RANK hi){
+    RANK size = hi-lo;
+    Vector<T> container = *this;
+    container.delRng(hi, container.size());
+    container.delRng(0, lo);
+    // RANK i=0;
+    // while(lo<hi)
+    //     container[i++] = _elem[lo++];
+    return container;
+}
 
 template<typename T>
 bool Vector<T>::delRng(RANK lo, RANK hi){
     if(lo<0 || hi>_size || lo>=hi) return false;
-    while(lo< (_size-=hi-lo)) //lo靠上新size时，搬运结束
+    _size-=hi-lo;
+    while(lo< _size) //lo靠上新size时，搬运结束
         _elem[lo++] = _elem[hi++];
     return true;
 }
