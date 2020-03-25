@@ -1,9 +1,26 @@
 #include "../ComplHeap/complHeap.h"
+#include <iostream>
+
+
+template<typename T>
+void swap(T&a, T&b){
+    T tmp=a; a=b; b=tmp;
+}
+
 
 template<typename T>
 Vector<T>::Vector(initializer_list<T> il):_size(0){
     _elem = new T[_capacity = il.size()<<1];
     for(auto &e: il) _elem[_size++] = e;
+}
+
+
+template<typename T>
+Vector<T>::Vector(RANK size, T e){
+    _elem = new T[_capacity=size<<1];
+    _size = 0;
+    while(_size<size)
+        _elem[_size++] = T(e);
 }
 
 
@@ -19,7 +36,7 @@ void Vector<T>::copyFrom(T const *A, RANK lo, RANK hi){
 template<typename T>
 void Vector<T>::expand(RANK n){
     if(n==0 && _size<_capacity) return;
-    if(n>0) _capacity += max(n, _capacity); //批量增加元素时
+    if(n>0) _capacity += std::max(n, _capacity); //批量增加元素时
     else _capacity<<=1;
     T *oldElem = _elem;
     _elem = new T[_capacity];
@@ -40,14 +57,14 @@ void Vector<T>::insert(RANK idx, T value){
 
 
 template<typename T> //template<class STL>
-void Vector<T>::insert(RANK idx, Vector<T> &v){
+void Vector<T>::insert(RANK idx, const Vector<T> &v){
     expand(v.size());
     RANK ridx = idx+v.size();
     for(RANK j=_size-1, i=(_size+=v.size())-1; i>=ridx; ){  //搬运[idx, _size) 到 [idx+v.size, _size+v.size)区间
         _elem[i--] = _elem[j--];
     }
     for(RANK i=idx, j=0; i<ridx; ){ //将v拷贝到[idx, idx+v.size)区间
-        _elem[i++] = v[j++];
+        _elem[i++] = v.get(j++);
     }
 }
 
