@@ -1,19 +1,19 @@
 ## 目录
 
-#### 数组
+<!-- #### 数组 -->
 
 * [vector](#vector)
-  * [有序数组](#sorted-vector)
+  * [有序vector](#sorted-vector)
     *  [集合](#set)
   * [完全二叉堆](#heap)
   * 栈
 
 
-#### 链表
+<!-- #### 链表 -->
 - [ ] list
   - [ ] 队列
 
-#### 树
+<!-- #### 树 -->
 * [二叉树](#bintree)
   * [二叉搜索树](#BST)
     * AVL树
@@ -52,15 +52,20 @@
   vec += 5;   // 追加单个元素
   vec += {5, 6};  // 追加序列
   vec += vec2;     // 追加另一Vector<int>
+  // 注意：vec+=x 不等价于 vec=vec+x，后者会额外创建副本，对于Vector的所有派生类，类似的操作符都有这种区别
   ```
 + 访问
   ```CPP
   // 循秩访问（允许负数索引，索引范围：[-size, size) ）
   T get(int index);
-  // 在区间内按值查找值的索引（自后向前）
-  virtual RANK index(const T& value, RANK lo=0, RANK hi=-1);
+  // 在区间内按值查找值的索引（失败返回-1）
+  virtual RANK find(const T& value, RANK lo=0, RANK hi=-1);
   // 截取区间
   Vector<T> sub(RANK lo, RANK hi);
+  ```
++ 修改
+  ```CPP
+  void put(RANK idx, const T& value);
   ```
 + 插入
   ```CPP
@@ -141,6 +146,8 @@
   RANK add(const T& e);
   // 合并另一有序数组
   void extend(const SortedVector<T> &);
+  // 合并Vector
+  void extend(const Vector<T> &);
   // 合并两个SortedVector生成副本
   auto concat(const Vector<T> &);   // auto是为了便于派生类使用
   ```
@@ -148,8 +155,8 @@
   ```CPP
   // 继承，循秩访问（允许负数索引，索引范围：[-size, size) ）
   T get(int index);
-  // 二分查找，查找失败时返回合适的插入位置
-  virtual RANK index(const T& value, RANK lo=0, RANK hi=-1);
+  // 二分查找，失败时返回-1
+  virtual RANK find(const T& value, RANK lo=0, RANK hi=-1);
   // 继承，截取区间
   Vector<T> sub(RANK lo, RANK hi);
   ```
@@ -174,6 +181,13 @@
   // 继承，清空
   void clear();
   ```
++ 获取信息
+  ```CPP
+  // 继承，长度
+  RANK size();
+  // 继承，是否为空
+  bool empty();
+  ```
 + 去重
   ```CPP
   virtual RANK unique();
@@ -188,17 +202,68 @@
 <a name="set"></a>
 ### set
 
+```CPP
 + 继承自sorted vector
-<!-- + 隐藏了：+运算符、[]运算符、二分查找、唯一化、按索引或区间删除 -->
-- 实现功能（或重写方法）：
-  + 新增元素
-  + 是否包含指定元素
-  + 交集：运算符&
-  + 并集：运算符|
-  + 差集：运算符-
-  + 对称差：运算符^
-  + 相等：运算符==
-  + 含于：运算符<
+```
++ 构造
+  ```CPP
+  // 指定容量创建新集合
+  Set(RANK capacity=DEFAULT_CAP);
+  // 复制另一集合
+  Set(const Vector<T>& set);
+  // 利用初始化列表创建集合
+  Set(const initializer_list<T>& il);
+  ```
++ 增删
+  ```CPP
+  // 新增元素
+  bool add(const T& e);
+  // 按值删除
+  void remove(const T& value);
+  // 继承，清空
+  void clear();
+  ```
++ 重载运算符
+  ```CPP
+  // 判断两集合相等 ==
+  set == set1;  // bool
+  // 真含于 <
+  set < set1;  // bool
+  // 含于 <=
+  set <= set1;  // bool
+  // 真包含 >
+  set > set1;   // bool
+  // 包含
+  set >= set1;  // bool
+  // 并集 |
+  set | set1;
+  // 取并集并更新于自身 |=
+  set |= set1;
+  // 交集 &
+  set & set1;
+  // 取交集并更新于自身 &=
+  set &= set1;
+  // 差集 -
+  set - set1;
+  // 取差集并更新于自身 -=
+  set -= set1;
+  // 对称差 ^
+  set ^ set1;
+  // 取对称差并更新于自身 ^=
+  set ^= set1;
+  ```
++ 获取信息
+  ```CPP
+  // 继承，长度
+  RANK size();
+  // 继承，是否为空
+  bool empty();
+  ```
++ 遍历操作
+  ```CPP
+  template<typename VST>  // 继承，VST是函数指针
+  void map(VST &visit);
+  ```
 
 <a name="heap"></a>
 ### compl-heap
