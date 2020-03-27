@@ -3,10 +3,10 @@
 <!-- #### 数组 -->
 
 * [vector](#vector)
-  * [有序vector](#sorted-vector)
-    *  [集合](#set)
-  * [完全二叉堆](#heap)
-  * 栈
+ * [有序vector](#sorted-vector)
+  *  [集合](#set)
+ * [完全二叉堆](#heap)
+ * 栈
 
 
 <!-- #### 链表 -->
@@ -128,7 +128,7 @@
 ### sorted vector
 
 ```CPP
-// 继承自Vector，隐藏了父类部分api
+// 继承自Vector，隐藏了部分父类api
 ```
 
 + 构造
@@ -164,8 +164,8 @@
   ```CPP
   // 继承，[]  循秩访问（允许负数索引）
   T e = arr[index];
-  // +   返回两个vector合并产生的副本
-  Vector<T> v = v1 + v2;
+  // +   返回两个有序vector合并产生的副本
+  SortedVector<T> v = v1 + v2;
   // +=  在末端追加（vec表示Vector<int>)
   vec += 5;   // 追加单个元素
   vec += vec2;     // 追加另一SortedVector<int>
@@ -203,7 +203,7 @@
 ### set
 
 ```CPP
-+ 继承自sorted vector
+// 继承自sorted vector，隐藏部分父类api
 ```
 + 构造
   ```CPP
