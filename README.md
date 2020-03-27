@@ -3,10 +3,10 @@
 <!-- #### 数组 -->
 
 * [vector](#vector)
- * [有序vector](#sorted-vector)
-  *  [集合](#set)
- * [完全二叉堆](#heap)
- * 栈
+  * [有序vector](#sorted-vector)
+    *  [集合](#set)
+  * [完全二叉堆](#heap)
+  * 栈
 
 
 <!-- #### 链表 -->
