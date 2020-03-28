@@ -33,7 +33,8 @@ void ff(int const& n){cout<<n;}
 int main(){
     Set<int> l = {6,3,2,7,3,6,9,0,3};
     cout<<"use {6,3,2,7,3,6,9,0,3} build set l: ";l.map(look);cout<<endl;
-    cout<<"l contain 3? "<<l.contain(3)<<endl;
+    cout<<"l >> 3? "<<(l>>3)<<endl;
+    cout<<"-1 << l? "<<(1<<l)<<endl;
     cout<<"l add 5, l= "; l.add(5);l.map(look);cout<<endl;
     Set<int> m = {8,3,2,5,8,4};
     cout<<"use {8,3,2,5,8,4} build set m: ";m.map(look);cout<<endl;

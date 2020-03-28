@@ -235,6 +235,10 @@
   set > set1;   // bool
   // 包含
   set >= set1;  // bool
+  // 是否含有(元素)
+  set >> elem;  // bool，等价操作：set.contain(elem);
+  // 元素是否属于集合
+  elem << set;  // bool, 同样等价于：set.contain(elem);
   // 并集 |
   set | set1;
   // 取并集并更新于自身 |=
@@ -252,6 +256,7 @@
   // 取对称差并更新于自身 ^=
   set ^= set1;
   ```
++ 是否
 + 获取信息
   ```CPP
   // 继承，长度

@@ -20,6 +20,8 @@ protected:
     void move(RANK lo, RANK hi, RANK n);
     // 获取逆序度
     RANK dissorted() const;
+    // 交换两个位置
+    void swap(RANK, RANK);
 
 public:
     /* 构造 */
@@ -43,42 +45,46 @@ public:
     // 按索引获取值
     T& get(RANK idx) const;
     // 修改
-    bool put(RANK idx, const T& value);
+    void put(RANK idx, const T& value);
     // 重载[]
     T& operator [](RANK idx) const{return get(idx);}
+    // 在区间内查找值
+    virtual RANK find(const T& value, RANK lo=0, RANK hi=-1) const;
+    // 截取区间
+    Vector<T> sub(RANK lo, RANK hi);
 
-    // 重载+
-    auto operator +(const Vector<T> &v){return concat(v);}
-    // 重载+=
-    void operator +=(const Vector &v){return extend(v);}
-    void operator +=(const initializer_list<T>& il){return extend(il);}
     // 插入单个元素
     void insert(RANK idx, const T& value);
     // 插入Vector
     void insert(RANK idx, const Vector<T> &v);
     // 尾部追加
     void append(const T& value);
-    // 尾部扩展数组
+    // 尾部扩展
     void extend(initializer_list<T> il){extend(Vector<T>(il));}
-    void extend(const Vector<T> &v);
-    // 合并两个vector生成副本
-    auto concat(const Vector<T> &v);
-    // 截取区间
-    Vector<T> sub(RANK lo, RANK hi);
-    // 删除区间
-    bool delRng(RANK lo, RANK hi);
-    // 按元素删除，删除最右边一个满足条件的元素
+    void extend(const Vector<T> &);
+    // 返回两个vector合并产生的副本
+    auto concat(const Vector<T> &);
+    // 重载+（合并两个vector生成副本）
+    auto operator +(const Vector<T> &v){return concat(v);}
+    // 重载+=（尾部追加）
+    void operator +=(const T& e){append(e);}
+    void operator +=(const Vector &v){extend(v);}
+    void operator +=(const initializer_list<T>& il){extend(il);}
+
+    // 按值删除，删除最右边一个满足条件的元素
     RANK remove(const T& value);
     // 按索引删除
     T pop(RANK idx);
-    // 删除全部元素
+    // 删除区间
+    bool delRng(RANK lo, RANK hi);
+    // 清空
     void clear();
-    // 在区间内查找值
-    virtual RANK index(const T& value, RANK lo=0, RANK hi=-1) const;
-    // 遍历
-    template<typename VST> void map(VST &visit);
+
     // 去重
     virtual RANK unique();
+    // 遍历
+    template<typename VST> void map(VST &visit);
+
     /**排序**/
     void sort(RANK lo=0, RANK hi=-1){bubbleSort(lo, hi);}
     // 冒泡排序

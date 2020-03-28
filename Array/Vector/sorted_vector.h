@@ -2,8 +2,14 @@
 
 template<typename T>
 class SortedVector: public Vector<T>{
+
+protected:
+    // 二分查找, 查找失败返回合适插入位置
+    virtual RANK index(T const& e, RANK lo=0, RANK hi=-1) const;
     
 public:
+    // 构造--根据容量
+    SortedVector(RANK capacity=DEFAULT_CAP): Vector<T>::Vector(capacity){};
     // 构造--根据Vector
     SortedVector(const Vector<T>& sv, RANK lo=0, RANK hi=-1);
     // 构造--复制SortedVector
@@ -12,20 +18,21 @@ public:
     SortedVector(const initializer_list<T>& il);
     // 唯一化
     virtual RANK unique();
-    // 二分查找, 查找失败返回合适插入位置
-    virtual RANK index(T const& e, RANK lo=0, RANK hi=-1) const;
     // 二分查找，查找失败返回-1
     RANK find(T const& e, RANK lo=0, RANK hi=-1) const;
     // 添加至合适的位置
     RANK add(const T& e);
     // 合并两个SortedVector生成副本
-    auto concat(const Vector<T> &);
+    SortedVector<T> concat(const Vector<T> &);
     // 合并另一有序数组
     void extend(const SortedVector<T> &);
+    // 合并Vector
+    void extend(const Vector<T> &);
     // 重载+
-    auto operator +(const Vector<T> &v){return concat(v);}
+    SortedVector<T> operator +(const Vector<T> &v){return concat(v);}
     // 重载+=
-    auto operator +=(const SortedVector<T> &v){return extend(v);}
+    void operator +=(const T &e){add(e);}
+    void operator +=(const SortedVector<T> &v){extend(v);}
 
 private:    //禁用以下方法
     //插入
@@ -81,8 +88,8 @@ RANK SortedVector<T>::index(T const& e, RANK lo, RANK hi) const{
 
 template<typename T>    // 查找，失败返回-1
 RANK SortedVector<T>::find(T const& e, RANK lo, RANK hi) const{
-    RANK idx = index(e, lo, hi);
-    if(idx>=0 && this->_elem[idx] != e) idx = -1;
+    RANK idx = index(e, lo, hi)-1;
+    if(idx!=-1 && this->_elem[idx] != e) idx = -1;
     return idx;
 }
 
@@ -96,13 +103,20 @@ RANK SortedVector<T>::add(const T& e){
 
 
 template<typename T>    // 合并两个SortedVector生成副本
-auto SortedVector<T>::concat(const Vector<T> &v){
-    auto newv=Vector<T>::concat(v);
-    newv.Vector<T>::sort();
+SortedVector<T> SortedVector<T>::concat(const Vector<T> &v){
+    SortedVector<T> newv = *this;
+    newv.extend(v);
     return newv;
 }
 
-template<typename T>    // 合并另一有序数组
+template<typename T>    // 合并Vector
+void SortedVector<T>::extend(const Vector<T> &v){
+    v.Vector<T>::sort();
+    extend(static_cast<SortedVector<T>>(v));
+}
+
+
+template<typename T>    // 合并另一有序数组 mlogn
 void SortedVector<T>::extend(const SortedVector<T> &v){
     RANK hi = this->_size;    // hi是查找所依赖的右边界，查找区间为[0, hi)
     RANK ind;           // 查找位置

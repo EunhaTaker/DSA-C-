@@ -3,9 +3,11 @@
 
 
 template<typename T>    // 交换两个同类型对象的值
-void swap(T&a, T&b, T&tmp){
-    // tmp来自数组末端，这个位置永远没有数据，避免生成新的T对象
-    tmp=a; a=b; b= tmp;
+void Vector<T>::swap(RANK i, RANK j){
+    // _size位置永远没有数据, _size永远小于capacity
+    _elem[_size] = _elem[i];
+    _elem[i] = _elem[j];
+    _elem[j] = _elem[_size];
 }
 
 
@@ -137,7 +139,7 @@ void Vector<T>::extend(const Vector<T> &v){
 
 template<typename T>    // 合并两个vector生成副本
 auto Vector<T>::concat(const Vector<T> &v){
-    auto newv(*this);
+    auto newv = *this;
     newv.Vector<T>::insert(_size, v);
     return newv;
 }
@@ -183,7 +185,7 @@ T& Vector<T>::get(RANK idx) const{
 
 
 template<typename T>
-RANK Vector<T>::index(const T& value, RANK lo, RANK hi) const{
+RANK Vector<T>::find(const T& value, RANK lo, RANK hi) const{
     if(hi==-1) hi = _size;
     while(lo<hi-- && _elem[hi]!=value); //逆向查找
     return hi;  //hi<lo意味着查找失败
@@ -192,7 +194,7 @@ RANK Vector<T>::index(const T& value, RANK lo, RANK hi) const{
 
 template<typename T>
 RANK Vector<T>::remove(const T& value){
-    RANK idx = index(value);
+    RANK idx = find(value);
     if(idx!=-1)
         pop(idx);
     return idx;
@@ -205,11 +207,11 @@ void Vector<T>::clear(){
 }
 
 
-template<typename T>
-bool Vector<T>::put(RANK idx, const T& value){
-    if(idx<0 || idx>=_size) return false;
+template<typename T>    // 修改值
+void Vector<T>::put(RANK idx, const T& value){
+    // if(idx<0 || idx>=_size) return false;
     _elem[idx] = value;
-    return true;
+    // return true;
 }
 
 
@@ -220,29 +222,7 @@ void Vector<T>::map(VST &visit){
 }
 
 
-// //版本1
-// RANK unique(){
-//     Vector reps = Vector(_size)
-//     for(RANK i=1; i<_size; i++){
-//         for(RANK j=0; j<i; j++){
-//             if(_elem[j]==_elem[i]){
-//                 reps.append(i);
-//                 break;
-//             }
-//         }
-//     }
-//     RANK count=0
-//     for(RANK i=reps[0]; i<_size; i++){
-//         if(i+count==reps[0]){
-//             count++;
-//             _size--;
-//             reps.pop(0);
-//         }
-//         _elem[i]=_elem[i+count];
-//     }
-//     return count
-// }
-template<typename T>
+template<typename T>    // 去重
 RANK Vector<T>::unique(){
     RANK i=1,j=1,k=0;
     while(i<_size){
@@ -269,7 +249,7 @@ void Vector<T>::bubbleSort(RANK lo, RANK hi){
         temphi = 0;
         for(j=lo+1;j<hi;j++){   //冒泡至未排序部分的边界
             if(_elem[j]<_elem[j-1]){
-                swap(_elem[j], _elem[j-1], _elem[_size]);
+                swap(j, j-1);
                 temphi=j;   //记录交换操作到达的最右位置
             }
         }

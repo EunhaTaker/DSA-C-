@@ -30,7 +30,11 @@ public:
     bool operator==(const Set<T>&);
     //真含于 <
     bool operator<(const Set<T>&);
-    //衍生运算符
+    // 含有 >>
+    bool operator>>(const T& e){return contain(e);}
+    // 属于
+    friend bool operator<<(const T& e, const Set<T>& set){return set.contain(e);}
+    // 衍生运算符
     bool operator<=(const Set<T>& b) {Set<T> &a=*this; return a==b || a<b;}
     bool operator>(const Set<T>& b) {Set<T> &a=*this; return !(a<b);}
     bool operator>=(const Set<T>& b) {Set<T> &a=*this; return a==b || a>b;}
@@ -53,6 +57,9 @@ private:    //禁用以下方法
     RANK find(T e, RANK lo=0, RANK hi=-1);
 };
 
+
+// template<typename T>
+// bool operator << (const T& e, const Set<T>& set){return set.contain(e);}
 
 template<typename T>
 bool Set<T>::add(const T& e){
