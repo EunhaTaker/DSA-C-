@@ -5,6 +5,7 @@
 * [vector](#vector)
   * [有序vector](#sorted-vector)
     *  [集合](#set)
+  * [字符串](#string)
   * [完全二叉堆](#heap)
   * 栈
 
@@ -50,7 +51,7 @@
   Vector<T> v = v1 + v2;
   // +=  在末端追加（vec表示Vector<int>)
   vec += 5;   // 追加单个元素
-  vec += {5, 6};  // 追加序列
+  vec += {5, 6};  // 追加初始化序列
   vec += vec2;     // 追加另一Vector<int>
   // 注意：vec+=x 不等价于 vec=vec+x，后者会额外创建副本，对于Vector的所有派生类，类似的操作符都有这种区别
   ```
@@ -78,8 +79,10 @@
   ```CPP
   // 追加单个元素
   void append(const T& value);
+  // 追加数组区间
+  void extend(const T* A, RANK lo, RANK hi);
   // 追加一段序列
-  void extend(initializer_list<T> il);
+  void extend(const initializer_list<T>&);
   // 追加另一Vector
   void extend(const Vector<T> &);
   // 返回两个vector合并产生的副本
@@ -103,7 +106,7 @@
   // 是否为空
   bool empty();
   ```
-+ 排序（冒泡、归并、堆排序）
++ 排序
   ```CPP
   // 默认排序
   void sort(RANK lo=0, RANK hi=-1);
@@ -128,7 +131,7 @@
 ### sorted vector
 
 ```CPP
-// 继承自Vector，隐藏了部分父类api
+// 继承自vector，隐藏了部分父类api
 ```
 
 + 构造
@@ -256,7 +259,6 @@
   // 取对称差并更新于自身 ^=
   set ^= set1;
   ```
-+ 是否
 + 获取信息
   ```CPP
   // 继承，长度
@@ -268,6 +270,51 @@
   ```CPP
   template<typename VST>  // 继承，VST是函数指针
   void map(VST &visit);
+  ```
+
+<a name="string"></a>
+### string
+
+```CPP
+// 继承自vector
+```
++ 构造
+  ```CPP
+  String(const char*);  // 从字符数组生成
+  String(const String&); // 拷贝
+  ```
++ 查找
+  ```CPP
+  // 查找
+  RANK find(const char*);
+  RANK find(const String&);
+  ```
++ 替换
+  ```CPP
+  // 全替换（返回替换次数）
+  int replace(const char*, const char*);    // 两参数可分别替换为String类型
+  // 插入
+  void insert(RANK, const char*);
+  void insert(RANK, const String&);
+  ```
++ 子串
+  ```CPP
+  // 截取
+  String sub(RANK, RANK);
+  // 截去
+  String cut(RANK, RANK);
+  ```
++ 重载运算符
+  ```CPP
+  // +
+  str + 'a';    // 字符
+  str + "abc";  // 字符数组
+  str + str1;   // string
+  /* += 提供与+同样的支持，区别是不产生副本 */
+  // ==
+  str1 == str2;   // 字符串判等
+  // <<
+  cout<<str;      // 输出流
   ```
 
 <a name="heap"></a>

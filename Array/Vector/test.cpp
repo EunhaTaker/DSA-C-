@@ -19,6 +19,8 @@ int vector_test()
     Vector<int> v2 = {0,0,0};
     cout<<"it's v2: ";v2.map(look);cout<<endl;
     cout<<"v += v2  v= "; v+=v2; v.map(look); cout<<endl;
+    cout<<"delete range[3, 7): v= "; v.delRng(3, 7); v.map(look); cout<<endl;
+    cout<<"sub[4,7) of v: subv= "; auto subv = v.sub(4,7); subv.map(look); cout<<endl;
     v.unique();cout<<"unique v: ";v.map(look);cout<<endl;
     v.heapSort();
     cout<<"heapsort v: ";v.map(look);cout<<endl;
@@ -35,8 +37,6 @@ int sortedvector_test(){
     SortedVector<int> sv1 = {9,0,1,-3,56};
     cout<<"it's sv1: ";sv1.map(look);cout<<endl;
     cout<<"sv+=sv1(extend), sv= ";sv+=sv1; sv.map(look);cout<<endl;
-    auto nnn = sv+sv1;
-    // nnn.add(999);
     return 0;
 }
 
@@ -44,13 +44,10 @@ int sortedvector_test(){
 #include<math.h>
 
 int main(){
-    // vector_test();
-    // sortedvector_test();
-    Vector<int> v1;
-    Vector<int> v2={2,4};
-    Vector<Vector<int>> vv;
-    vv.append(v1);
-    vv[0] = v2;
-    vv[0].map(look);
+    cout<<"test vector:\n";
+    vector_test();
+    cout<<"\n\ntest sorted vector:\n";
+    sortedvector_test();
+    
 }
 

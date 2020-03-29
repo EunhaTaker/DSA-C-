@@ -11,6 +11,17 @@ void Vector<T>::swap(RANK i, RANK j){
 }
 
 
+template<typename T>    // 交换两个同类型对象的值
+bool Vector<T>::equal(const T& a, const T& b){
+    // try{
+    //     if(a==b) return true;
+    //     else return false;
+    // }catch{
+    //     return &a == &b;
+    // }
+    return 0;
+}
+
 template<typename T>    // 构造--依据容量
 Vector<T>::Vector(RANK capacity){
     _elem = new T[_capacity=capacity];
@@ -56,9 +67,8 @@ Vector<T>::~Vector(){
 template<typename T>    // 从数组复制到_elem（内部方法）
 void Vector<T>::copyFrom(T const *A, RANK lo, RANK hi){
     _elem=new T[_capacity=(hi-lo)<<1];
-    _size=0;
-    while(lo<hi)
-        _elem[_size++]=A[lo++];
+    _size=hi-lo;
+    carry(A, lo, _size, 0);
 }
 
 
@@ -77,6 +87,13 @@ void Vector<T>::move(RANK lo, RANK hi, RANK n){
 }
 
 
+template<typename T>    // 搬运（将A的srcStart往后length个字符搬运到this的destStart开始的length个位置上）
+void Vector<T>::carry(const T* A, RANK srcStart, RANK length, RANK destStart){
+    while(length--)
+        _elem[destStart++] = A[srcStart++];
+}
+
+
 template<typename T>    // 扩容，2倍扩充策略
 void Vector<T>::expand(RANK n){
     RANK need = n + _size;
@@ -86,8 +103,9 @@ void Vector<T>::expand(RANK n){
             _capacity <<= 1;
     T *oldElem = _elem;
     _elem = new T[_capacity];
-    for(RANK i=0;i<_size;i++)
-        _elem[i] = oldElem[i];
+    carry(oldElem, 0, _size);
+    // for(RANK i=0;i<_size;i++)
+    //     _elem[i] = oldElem[i];
     delete [] oldElem;
 }
 
@@ -132,14 +150,23 @@ void Vector<T>::append(const T& value){
 
 
 template<typename T>
-void Vector<T>::extend(const Vector<T> &v){
-    this->Vector<T>::insert(_size, v);
+void Vector<T>::extend(const T* A, RANK lo, RANK hi){
+    expand(hi-lo);
+    carry(A, lo, hi-lo, _size);
+    _size += hi-lo;
+}
+
+
+template<typename T>
+void Vector<T>::extend(const initializer_list<T>& il){
+    expand(il.size());
+    for(auto e: il) append(e);
 }
 
 
 template<typename T>    // 合并两个vector生成副本
-auto Vector<T>::concat(const Vector<T> &v){
-    auto newv = *this;
+Vector<T> Vector<T>::concat(const Vector<T> &v){
+    Vector<T> newv = *this;
     newv.Vector<T>::insert(_size, v);
     return newv;
 }
@@ -147,22 +174,17 @@ auto Vector<T>::concat(const Vector<T> &v){
 
 template<typename T> //template<typename STL>
 Vector<T> Vector<T>::sub(RANK lo, RANK hi){
-    RANK size = hi-lo;
-    Vector<T> container = *this;
-    container.delRng(hi, container.size());
-    container.delRng(0, lo);
-    // RANK i=0;
-    // while(lo<hi)
-    //     container[i++] = _elem[lo++];
-    return container;
+    return Vector<T>(_elem, lo, hi);
 }
+
 
 template<typename T>
 bool Vector<T>::delRng(RANK lo, RANK hi){
     if(lo<0 || hi>_size || lo>=hi) return false;
+    // while(lo< _size) //lo靠上新size时，搬运结束
+    //     _elem[lo++] = _elem[hi++];
+    carry(_elem, hi, _size-hi, lo);
     _size-=hi-lo;
-    while(lo< _size) //lo靠上新size时，搬运结束
-        _elem[lo++] = _elem[hi++];
     return true;
 }
 

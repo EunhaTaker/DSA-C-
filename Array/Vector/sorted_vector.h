@@ -39,14 +39,8 @@ private:    //禁用以下方法
     void insert(RANK idx, T value);
     //尾部追加
     void append(T value);
-    //获取逆序度
-    RANK dissorted() const;
     ///排序
     void sort();
-    //冒泡排序
-    void bubbleSort();
-    //归并排序
-    void mergeSort(RANK lo=0, RANK hi=-1);
 };
 
 
@@ -111,8 +105,10 @@ SortedVector<T> SortedVector<T>::concat(const Vector<T> &v){
 
 template<typename T>    // 合并Vector
 void SortedVector<T>::extend(const Vector<T> &v){
-    v.Vector<T>::sort();
-    extend(static_cast<SortedVector<T>>(v));
+    // v.sort()
+    // extend(static_cast<SortedVector<T>>(v));
+    Vector<T>::extend(v);
+    Vector<T>::sort();
 }
 
 

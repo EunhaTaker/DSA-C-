@@ -20,8 +20,18 @@ protected:
     void move(RANK lo, RANK hi, RANK n);
     // 获取逆序度
     RANK dissorted() const;
+    // 冒泡排序
+    void bubbleSort(RANK lo=0, RANK hi=-1);
+    // 归并排序
+    void mergeSort(RANK lo=0, RANK hi=-1);  //TODO bug
+    // 堆排序
+    void heapSort(RANK lo=0, RANK hi=-1);
     // 交换两个位置
     void swap(RANK, RANK);
+    // 搬运（将A的srcStart往后length个字符搬运到this的destStart开始的length个位置上）
+    void carry(const T* A, RANK srcStart, RANK length, RANK destStart=0);
+    // 判断相等，若T未重载==则判断相同
+    bool equal(const T&, const T&);
 
 public:
     /* 构造 */
@@ -60,12 +70,13 @@ public:
     // 尾部追加
     void append(const T& value);
     // 尾部扩展
-    void extend(initializer_list<T> il){extend(Vector<T>(il));}
-    void extend(const Vector<T> &);
+    void extend(const T* A, RANK lo, RANK hi);
+    void extend(const initializer_list<T>& il);
+    void extend(const Vector<T>& v){extend(v._elem, 0, v._size);}
     // 返回两个vector合并产生的副本
-    auto concat(const Vector<T> &);
+    Vector<T> concat(const Vector<T> &);
     // 重载+（合并两个vector生成副本）
-    auto operator +(const Vector<T> &v){return concat(v);}
+    Vector<T> operator +(const Vector<T> &v){return concat(v);}
     // 重载+=（尾部追加）
     void operator +=(const T& e){append(e);}
     void operator +=(const Vector &v){extend(v);}
@@ -85,14 +96,8 @@ public:
     // 遍历
     template<typename VST> void map(VST &visit);
 
-    /**排序**/
+    //排序
     void sort(RANK lo=0, RANK hi=-1){bubbleSort(lo, hi);}
-    // 冒泡排序
-    void bubbleSort(RANK lo=0, RANK hi=-1);
-    // 归并排序
-    void mergeSort(RANK lo=0, RANK hi=-1);  //TODO bug
-    // 堆排序
-    void heapSort(RANK lo=0, RANK hi=-1);
 };
 
 #include "vector_implement.h"
