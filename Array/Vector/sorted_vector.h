@@ -8,12 +8,12 @@ protected:
     virtual RANK index(T const& e, RANK lo=0, RANK hi=-1) const;
     
 public:
-    // 构造--根据容量
+    // 默认构造--根据容量
     SortedVector(RANK capacity=DEFAULT_CAP): Vector<T>::Vector(capacity){};
+    // 拷贝构造--复制SortedVector
+    SortedVector(const SortedVector<T> & sv, RANK lo=0, RANK hi=-1) : Vector<T>::Vector(sv, lo, hi) {}
     // 构造--根据Vector
     SortedVector(const Vector<T>& sv, RANK lo=0, RANK hi=-1);
-    // 构造--复制SortedVector
-    SortedVector(const SortedVector<T> & sv, RANK lo=0, RANK hi=-1) : Vector<T>::Vector(sv, lo, hi) {}
     // 构造--根据初始化列表
     SortedVector(const initializer_list<T>& il);
     // 唯一化

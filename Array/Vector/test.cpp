@@ -22,8 +22,7 @@ int vector_test()
     cout<<"delete range[3, 7): v= "; v.delRng(3, 7); v.map(look); cout<<endl;
     cout<<"sub[4,7) of v: subv= "; auto subv = v.sub(4,7); subv.map(look); cout<<endl;
     v.unique();cout<<"unique v: ";v.map(look);cout<<endl;
-    v.heapSort();
-    cout<<"heapsort v: ";v.map(look);cout<<endl;
+    cout<<"sort v: ";v.sort();v.map(look);cout<<endl;
     return 0;
 }
 
@@ -48,6 +47,5 @@ int main(){
     vector_test();
     cout<<"\n\ntest sorted vector:\n";
     sortedvector_test();
-    
 }
 

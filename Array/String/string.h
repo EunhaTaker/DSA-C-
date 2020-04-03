@@ -4,14 +4,14 @@
 
 class String: public Vector<char>{
 protected:
-    String(const char* A, RANK lo, RANK hi);
     // 获取内部字符数组，意义在于补充\0
     char* getElem() const;
 
 public:
-    // 构造--复制const char*
-    String(const char*);
-    String(const String& str);
+    // 默认构造--复制const char*
+    String(const char* A="", RANK lo=0, RANK hi=-1);
+    // 拷贝构造
+    String(const String& str, RANK lo=0, RANK hi=-1): String(str.getElem(), lo, hi){}
 
 
     // 查找
@@ -19,9 +19,9 @@ public:
     RANK find(const String& str) {return find(str.getElem());}
     // 替换（返回替换次数）
     int replace(const char*, const char*);
-    int replace(const String& str, const char* A) {replace(str.getElem(), A);}
-    int replace(const String& str1, const String& str2) {replace(str1.getElem(), str2.getElem());}
-    int replace(const char* A, const String& str) {replace(A, str.getElem());}
+    int replace(const String& str, const char* A) {return replace(str.getElem(), A);}
+    int replace(const String& str1, const String& str2) {return replace(str1.getElem(), str2.getElem());}
+    int replace(const char* A, const String& str) {return replace(A, str.getElem());}
     //插入
     void insert(RANK, const char*);
     void insert(RANK idx, const String& str) {insert(idx, str.getElem());}
@@ -52,9 +52,7 @@ private:    //禁用以下方法
 // #include "string_implement.h"
 
 
-String::String(const char* A, RANK lo, RANK hi): Vector<char>::Vector(A, lo, hi) {}
-String::String(const char* A): Vector<char>::Vector(A, 0, strlen(A)){}
-String::String(const String& str): String(str.getElem()) {}
+String::String(const char* A, RANK lo, RANK hi): Vector<char>::Vector(A, lo, hi!=-1?hi:strlen(A)) {}
 
 std::ostream& operator <<(std::ostream& os, const String& str){
     for(int i=0; i<str._size; i++) os<<str[i];

@@ -3,9 +3,11 @@
 template<typename T>
 class Set : public SortedVector<T>{
 public:
-    // 构造--根据容量
+    // 默认构造--根据容量
     Set(RANK capacity=DEFAULT_CAP): SortedVector<T>::SortedVector(capacity){};
+    // 拷贝构造
     Set(const Vector<T>& set): SortedVector<T>::SortedVector(set) {SortedVector<T>::unique();}
+    // 使用列表初始化容器进行初始化
     Set(const initializer_list<T>& il): SortedVector<T>::SortedVector(il) {SortedVector<T>::unique();}
     // 新增
     bool add(const T& e);

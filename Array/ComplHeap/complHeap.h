@@ -1,8 +1,8 @@
 #pragma once
 #include "../Vector/vector.h"
-#define Lchild(i) (i*2+1)
-#define Rchild(i) (i*2+2)
-#define Parent(i) ((i-1)/2)
+inline RANK Lchild(RANK i) {return (i*2+1);}
+inline RANK Rchild(RANK i) {return (i*2+2);}
+inline RANK Parent(RANK i) {return ((i-1)/2);}
 
 
 template<typename T> class ComplHeap : public Vector<T>{

@@ -1,9 +1,10 @@
 #include "../ComplHeap/complHeap.h"
 #include <iostream>
+#include<string.h>
 
 
 template<typename T>    // 交换两个同类型对象的值
-void Vector<T>::swap(RANK i, RANK j){
+inline void Vector<T>::swap(RANK i, RANK j){
     // _size位置永远没有数据, _size永远小于capacity
     _elem[_size] = _elem[i];
     _elem[i] = _elem[j];
@@ -11,8 +12,8 @@ void Vector<T>::swap(RANK i, RANK j){
 }
 
 
-template<typename T>    // 交换两个同类型对象的值
-bool Vector<T>::equal(const T& a, const T& b){
+template<typename T>    // 判断相等，若T未重载==则判断相同
+static bool equal(const T& a, const T& b){
     // try{
     //     if(a==b) return true;
     //     else return false;
@@ -59,7 +60,7 @@ Vector<T>::Vector(Vector<T> const& V, RANK lo, RANK hi){
 
 template<typename T>    // 析构
 Vector<T>::~Vector(){
-    std::cout<<"析构";
+    // std::cout<<"析构";
     if(!heapFlag) delete[] _elem;
 }
 
@@ -88,9 +89,8 @@ void Vector<T>::move(RANK lo, RANK hi, RANK n){
 
 
 template<typename T>    // 搬运（将A的srcStart往后length个字符搬运到this的destStart开始的length个位置上）
-void Vector<T>::carry(const T* A, RANK srcStart, RANK length, RANK destStart){
-    while(length--)
-        _elem[destStart++] = A[srcStart++];
+inline void Vector<T>::carry(const T* A, RANK srcStart, RANK length, RANK destStart){
+    memcpy(_elem+destStart, A+srcStart, length*sizeof(T));
 }
 
 
@@ -104,20 +104,18 @@ void Vector<T>::expand(RANK n){
     T *oldElem = _elem;
     _elem = new T[_capacity];
     carry(oldElem, 0, _size);
-    // for(RANK i=0;i<_size;i++)
-    //     _elem[i] = oldElem[i];
     delete [] oldElem;
 }
 
 
 template<typename T>    // 是否空
-bool Vector<T>::empty()const{
+inline bool Vector<T>::empty()const{
     return _size==0;
 }
 
 
 template<typename T>    // 长度
-RANK Vector<T>::size() const{
+inline RANK Vector<T>::size() const{
     return _size;
 }
 

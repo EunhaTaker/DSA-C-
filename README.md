@@ -31,14 +31,14 @@
 ```
 + 构造
   ```CPP
-  // 传入容量，构造空vector
+  // 默认构造，按容量初始化空vector
   Vector(RANK capacity=DEFAULT_CAP);
+  // 拷贝构造
+  Vector(Vector<T> const& V, RANK lo=0, RANK hi=-1);
   // 传入长度和默认值
   Vector(RANK, const T& default_value);
   // 传入序列及区间，复制到本vector进行构建
   Vector(const T *A, RANK lo, RANK hi, bool heapFlag=false);
-  // 复制另一个vector
-  Vector(Vector<T> const& V, RANK lo=0, RANK hi=-1);
   // 使用列表初始化容器进行初始化
   Vector(const initializer_list<T>&);
   ```
@@ -108,14 +108,7 @@
   ```
 + 排序
   ```CPP
-  // 默认排序
   void sort(RANK lo=0, RANK hi=-1);
-  // 冒泡排序
-  void bubbleSort(RANK lo=0, RANK hi=-1);
-  // 归并排序
-  void mergeSort(RANK lo=0, RANK hi=-1);
-  // 堆排序
-  void heapSort(RANK lo=0, RANK hi=-1);
   ```
 + 去重
   ```CPP
@@ -131,15 +124,17 @@
 ### sorted vector
 
 ```CPP
-// 继承自vector，隐藏了部分父类api
+// 继承自vector，禁用部分父类api
 ```
 
 + 构造
   ```CPP
+  // 默认构造，按容量初始化空SortedVector
+  SortedVector(RANK capacity=DEFAULT_CAP);
+  // 拷贝构造--复制SortedVector
+  SortedVector(const SortedVector<T> & sv, RANK lo=0, RANK hi=-1);
   // 构造--根据Vector
   SortedVector(const Vector<T>& sv, RANK lo=0, RANK hi=-1);
-  // 构造--复制SortedVector
-  SortedVector(const SortedVector<T> & sv, RANK lo=0, RANK hi=-1);
   // 构造--根据初始化列表
   SortedVector(const initializer_list<T>&);
   ```
@@ -206,13 +201,13 @@
 ### set
 
 ```CPP
-// 继承自sorted vector，隐藏部分父类api
+// 继承自sorted vector，禁用部分父类api
 ```
 + 构造
   ```CPP
-  // 指定容量创建新集合
+  // 默认构造：根据容量创建空集合
   Set(RANK capacity=DEFAULT_CAP);
-  // 复制另一集合
+  // 拷贝构造
   Set(const Vector<T>& set);
   // 利用初始化列表创建集合
   Set(const initializer_list<T>& il);
@@ -276,17 +271,20 @@
 ### string
 
 ```CPP
-// 继承自vector
+// 继承自vector，禁用部分父类api
 ```
 + 构造
   ```CPP
-  String(const char*);  // 从字符数组生成
-  String(const String&); // 拷贝
+  // 默认构造，复制字符数组生成
+  String(const char* A="", RANK lo=0, RANK hi=-1);
+  // 拷贝构造
+  String(const String&);
   ```
 + 查找
   ```CPP
-  // 查找
+  // 查找字符数组
   RANK find(const char*);
+  // 查找String
   RANK find(const String&);
   ```
 + 替换
@@ -315,6 +313,20 @@
   str1 == str2;   // 字符串判等
   // <<
   cout<<str;      // 输出流
+  // []  循秩访问（允许负数索引）
+  char e = str[index];   // 读
+  str[index] = e;     // 改
+  ```
++ 数组操作
+  ```CPP
+  // 是否空
+  bool empty() const;
+  // 大小
+  RANK size() const;
+  // 按索引获取值
+  T& get(RANK idx) const;
+  // 修改
+  void put(RANK idx, const T& value);
   ```
 
 <a name="heap"></a>

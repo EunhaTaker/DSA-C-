@@ -30,19 +30,17 @@ protected:
     void swap(RANK, RANK);
     // 搬运（将A的srcStart往后length个字符搬运到this的destStart开始的length个位置上）
     void carry(const T* A, RANK srcStart, RANK length, RANK destStart=0);
-    // 判断相等，若T未重载==则判断相同
-    bool equal(const T&, const T&);
 
 public:
     /* 构造 */
-    // 传入容量，构造空vector
+    // 默认构造，按容量初始化空vector
     Vector(RANK capacity=DEFAULT_CAP);
+    // 拷贝构造
+    Vector(Vector<T> const& V, RANK lo=0, RANK hi=-1);
     // 传入长度和默认值
     Vector(RANK, const T&);
     // 传入序列及区间，复制到本vector进行构建
     Vector(const T *A, RANK lo, RANK hi, bool heapFlag=false);
-    // 复制另一个vector
-    Vector(Vector<T> const& V, RANK lo=0, RANK hi=-1);
     // 使用列表初始化容器进行初始化
     Vector(const initializer_list<T>&);
     // 析构
