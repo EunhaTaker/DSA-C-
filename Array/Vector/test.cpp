@@ -18,7 +18,7 @@ int vector_test()
     cout<<"insert {9,9,9} to index 4 of v: v= ";v.map(look);cout<<endl;
     Vector<int> v2 = {0,0,0};
     cout<<"it's v2: ";v2.map(look);cout<<endl;
-    cout<<"v += v2  v= "; v+=v2; v.map(look); cout<<endl;
+    cout<<"v += v2  v= "; (v+=v2).map(look); cout<<endl;
     cout<<"delete range[3, 7): v= "; v.delRng(3, 7); v.map(look); cout<<endl;
     cout<<"sub[4,7) of v: subv= "; auto subv = v.sub(4,7); subv.map(look); cout<<endl;
     v.unique();cout<<"unique v: ";v.map(look);cout<<endl;

@@ -19,20 +19,20 @@ public:
     // 唯一化
     virtual RANK unique();
     // 二分查找，查找失败返回-1
-    RANK find(T const& e, RANK lo=0, RANK hi=-1) const;
+    virtual RANK find(T const& e, RANK lo=0, RANK hi=-1) const;
     // 添加至合适的位置
     RANK add(const T& e);
     // 合并两个SortedVector生成副本
-    SortedVector<T> concat(const Vector<T> &);
+    virtual SortedVector<T> concat(const Vector<T> &);
     // 合并另一有序数组
-    void extend(const SortedVector<T> &);
+    virtual void extend(const SortedVector<T> &);
     // 合并Vector
-    void extend(const Vector<T> &);
+    virtual void extend(const Vector<T> &);
     // 重载+
-    SortedVector<T> operator +(const Vector<T> &v){return concat(v);}
+    virtual SortedVector<T> operator +(const Vector<T> &v){return concat(v);}
     // 重载+=
-    void operator +=(const T &e){add(e);}
-    void operator +=(const SortedVector<T> &v){extend(v);}
+    virtual SortedVector<T>& operator +=(const T &e){add(e); return *this;}
+    virtual SortedVector<T>& operator +=(const SortedVector<T> &v){extend(v); return *this;}
 
 private:    //禁用以下方法
     //插入

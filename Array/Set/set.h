@@ -9,17 +9,17 @@ public:
     Set(const Vector<T>& set): SortedVector<T>::SortedVector(set) {SortedVector<T>::unique();}
     // 使用列表初始化容器进行初始化
     Set(const initializer_list<T>& il): SortedVector<T>::SortedVector(il) {SortedVector<T>::unique();}
-    // 新增
+    // 新增(不予返回删除位置)
     bool add(const T& e);
     // 删除(不予返回删除位置)
     void remove(const T& e){SortedVector<T>::remove(e);}
     // 是否包含元素e
     bool contain(T const& e) const;
     // 成为与另一集合的 并、交、差、对称差
-    void operator|=(const Set<T> &a);
-    void operator&=(const Set<T> &a);
-    void operator-=(const Set<T> &a);
-    void operator^=(const Set<T> &a);
+    auto& operator|=(const Set<T> &a);
+    auto& operator&=(const Set<T> &a);
+    auto& operator-=(const Set<T> &a);
+    auto& operator^=(const Set<T> &a);
     //并集 |
     Set<T> operator|(const Set<T> &a){auto newSet = *this; newSet|=a; return newSet;}
     //交集 &
@@ -60,8 +60,6 @@ private:    //禁用以下方法
 };
 
 
-// template<typename T>
-// bool operator << (const T& e, const Set<T>& set){return set.contain(e);}
 
 template<typename T>
 bool Set<T>::add(const T& e){
@@ -80,14 +78,14 @@ bool Set<T>::contain(T const& e) const{
 
 
 template<typename T>    // 并集
-void Set<T>::operator|=(const Set<T>& a){
+auto& Set<T>::operator|=(const Set<T>& a){
     SortedVector<T>::extend(a);
     SortedVector<T>::unique();
 }
 
 
 template<typename T>    // 交集
-void Set<T>::operator&=(const Set<T> &b){
+auto& Set<T>::operator&=(const Set<T> &b){
     Set<T> &a = *this;  // 仅为了美观统一
     RANK la=a.size(), lb=b.size();
     RANK i=0,j=0;
@@ -101,7 +99,7 @@ void Set<T>::operator&=(const Set<T> &b){
 
 
 template<typename T>    // 差集
-void Set<T>::operator-=(const Set<T> &b){
+auto& Set<T>::operator-=(const Set<T> &b){
     Set<T> &a = *this;
     RANK i=0,j=0;
     RANK la=a.size(), lb=b.size();
@@ -117,7 +115,7 @@ void Set<T>::operator-=(const Set<T> &b){
 
 
 template<typename T>    // 对称差
-void Set<T>::operator^=(const Set<T> &b){
+auto& Set<T>::operator^=(const Set<T> &b){
     Set<T> &a = *this;
     RANK i=0,j=0;
     RANK la=a.size(), lb=b.size();

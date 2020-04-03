@@ -68,17 +68,17 @@ public:
     // 尾部追加
     void append(const T& value);
     // 尾部扩展
-    void extend(const T* A, RANK lo, RANK hi);
-    void extend(const initializer_list<T>& il);
-    void extend(const Vector<T>& v){extend(v._elem, 0, v._size);}
+    virtual void extend(const T* A, RANK lo, RANK hi);
+    virtual void extend(const initializer_list<T>& il);
+    virtual void extend(const Vector<T>& v){extend(v._elem, 0, v._size);}
     // 返回两个vector合并产生的副本
-    Vector<T> concat(const Vector<T> &);
+    virtual Vector<T> concat(const Vector<T> &);
     // 重载+（合并两个vector生成副本）
-    Vector<T> operator +(const Vector<T> &v){return concat(v);}
+    virtual Vector<T> operator +(const Vector<T> &v){return concat(v);}
     // 重载+=（尾部追加）
-    void operator +=(const T& e){append(e);}
-    void operator +=(const Vector &v){extend(v);}
-    void operator +=(const initializer_list<T>& il){extend(il);}
+    virtual Vector<T>& operator +=(const T& e){append(e); return *this;}
+    virtual Vector<T>& operator +=(const Vector &v){extend(v); return *this;}
+    virtual Vector<T>& operator +=(const initializer_list<T>& il){extend(il); return *this;}
 
     // 按值删除，删除最右边一个满足条件的元素
     RANK remove(const T& value);

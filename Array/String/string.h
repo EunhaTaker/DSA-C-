@@ -34,9 +34,9 @@ public:
     String operator+(const char ch);  // char* 与 char& 冲突？？？
     String operator+(const String& str){return operator+(str.getElem());}
     // 重载+=
-    void operator+=(const char*);
-    void operator+=(const char& ch){Vector<char>::append(ch);}
-    void operator+=(const String& str){operator+=(str.getElem());}
+    String& operator+=(const char*);
+    String& operator+=(const char& ch){Vector<char>::append(ch);}
+    String& operator+=(const String& str){operator+=(str.getElem());}
 
     // 重载==
     bool operator ==(const char*);
@@ -73,7 +73,7 @@ String String::operator+(const char* A){
 };
 
 
-void String::operator+=(const char* A){
+String& String::operator+=(const char* A){
     Vector<char>::extend(A, 0, strlen(A));
 };
 

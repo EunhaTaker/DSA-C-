@@ -17,5 +17,5 @@ int main(){
     cout<<str<<endl;
     cout<<"find \"world\" from str, index="<<str.find("world")<<endl;
     cout<<"str replace all \"world\" to \"c++\", replace times="<<str.replace("world", String("c++")); cout<<"  str="<<str<<endl;
-    cout<<"str+=\'a\', str+=\'bc\', str="; str+='a', str+="bc"; cout<<str<<endl;
+    cout<<"str+=\'a\', str+=\'bc\', str="; str+='a'; cout<<(str+="bc")<<endl;
 }

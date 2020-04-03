@@ -60,7 +60,7 @@ Vector<T>::Vector(Vector<T> const& V, RANK lo, RANK hi){
 
 template<typename T>    // 析构
 Vector<T>::~Vector(){
-    // std::cout<<"析构";
+    std::cout<<"析构";
     if(!heapFlag) delete[] _elem;
 }
 
