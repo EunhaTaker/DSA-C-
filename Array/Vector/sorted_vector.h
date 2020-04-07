@@ -23,13 +23,13 @@ public:
     // 添加至合适的位置
     RANK add(const T& e);
     // 合并两个SortedVector生成副本
-    virtual SortedVector<T> concat(const Vector<T> &);
+    SortedVector<T> concat(const Vector<T> &);
     // 合并另一有序数组
     virtual void extend(const SortedVector<T> &);
     // 合并Vector
     virtual void extend(const Vector<T> &);
     // 重载+
-    virtual SortedVector<T> operator +(const Vector<T> &v){return concat(v);}
+    SortedVector<T> operator +(const Vector<T> &v){return concat(v);}
     // 重载+=
     virtual SortedVector<T>& operator +=(const T &e){add(e); return *this;}
     virtual SortedVector<T>& operator +=(const SortedVector<T> &v){extend(v); return *this;}

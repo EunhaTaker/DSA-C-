@@ -72,9 +72,9 @@ public:
     virtual void extend(const initializer_list<T>& il);
     virtual void extend(const Vector<T>& v){extend(v._elem, 0, v._size);}
     // 返回两个vector合并产生的副本
-    virtual Vector<T> concat(const Vector<T> &);
+    Vector<T> concat(const Vector<T> &);
     // 重载+（合并两个vector生成副本）
-    virtual Vector<T> operator +(const Vector<T> &v){return concat(v);}
+    Vector<T> operator +(const Vector<T> &v){return concat(v);}
     // 重载+=（尾部追加）
     virtual Vector<T>& operator +=(const T& e){append(e); return *this;}
     virtual Vector<T>& operator +=(const Vector &v){extend(v); return *this;}

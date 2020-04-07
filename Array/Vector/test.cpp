@@ -2,8 +2,8 @@
 #include "sorted_vector.h"
 using std::cout;
 using std::endl;
+using std::ostream;
 
-#define pop() target+=ans.back();ans.pop_back();if(ans.empty()){i++;j=i;continue;}
 void look(int& a){
     cout<<a<<" ";
 }
@@ -12,7 +12,7 @@ void look(int& a){
 int vector_test()
 {
     Vector<int> v =  {1, 2, 3, 4, 5, 6, 7, 8};
-    cout<<"it's v: ";v.map(look);cout<<endl;
+    cout<<"it's v: "; v.map(look); cout<<endl;
     cout<<"v' size: "<<v.size()<<endl;
     v.insert(4, {9,9,9});
     cout<<"insert {9,9,9} to index 4 of v: v= ";v.map(look);cout<<endl;
@@ -35,7 +35,7 @@ int sortedvector_test(){
     
     SortedVector<int> sv1 = {9,0,1,-3,56};
     cout<<"it's sv1: ";sv1.map(look);cout<<endl;
-    cout<<"sv+=sv1(extend), sv= ";sv+=sv1; sv.map(look);cout<<endl;
+    cout<<"sv+=sv1(extend), sv= ";(sv+sv1).map(look);cout<<endl;
     return 0;
 }
 
